@@ -31,4 +31,8 @@ return [
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
 
+    'api' => [
+        'jsonplaceholder' => env('API_ENDPOINT', 'https://jsonplaceholder.typicode.com')
+    ],
+
 ];
