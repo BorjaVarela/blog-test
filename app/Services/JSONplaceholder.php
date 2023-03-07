@@ -7,14 +7,17 @@ use GuzzleHttp\Client;
 class JSONplaceholder
 {
 
-    public function get($route, $id = null)
+    public function get($route, $value = null, $field = null)
     {
         $client = new Client([
             'base_uri' => config('services.api.jsonplaceholder')
         ]);
         $extra = [];
-        if (!empty($id)) {
-            $extra = ['id'=> $id];
+
+        if (empty($field) && !empty($value)) {
+            $extra = ['id'=> $value];
+        } elseif (!empty($field) && !empty($value)) {
+            $extra = [$field=> $value];
         }
 
         $response = $client->request('GET', $route, ['query' => $extra]);
@@ -26,7 +29,7 @@ class JSONplaceholder
         $client = new Client([
             'base_uri' => config('services.api.jsonplaceholder')
         ]);
-        $response = $client->request('GET', $route, ['json' => $json]);
+        $response = $client->request('POST', $route, ['json' => $json]);
         return $response;
     }
 }

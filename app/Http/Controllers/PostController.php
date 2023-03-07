@@ -15,13 +15,10 @@ class PostController extends Controller
      */
     public function index()
     {
-        try {
-            $posts = Post::getAll();
+        $posts = Post::getAll();
 
-            $return = view('index', compact('posts'));
-        } catch (Exception $e) {
-            $return = view('errors.500');
-        }
+        $return = view('index', compact('posts'));
+
         return $return;
     }
 
@@ -36,10 +33,11 @@ class PostController extends Controller
         try {
             $post = Post::getById($id);
             $user = Author::getById($post->userId);
-            $return = view('post', compact('post', 'user'));
-        } catch (Exception $e) {
-            $return = view('errors.500');
+
+            return view('post', compact('post', 'user'));
+        } catch (\Exception $e) {
+            abort(404, $e->getMessage());
         }
-        return $return;
+
     }
 }
