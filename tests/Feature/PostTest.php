@@ -44,7 +44,7 @@ class PostTest extends TestCase
         $post = [
             'title' => 'Test',
             'body' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad ',
-            'username' => 'Delphine',
+            'username' => 'Tests',
             'name' => 'Clementina DuBuque',
             'email' => 'test@test.test',
             'address' => [
@@ -70,5 +70,84 @@ class PostTest extends TestCase
         $response
         ->assertStatus(200)
         ->assertJsonPath('status', 'OK');
+    }
+
+    /**
+     * @test
+     */
+    public function post_store_with_required_fields(): void
+    {
+        $post = [
+            'title' => 'Test',
+            'body' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad ',
+            'username' => 'Tests',
+        ];
+
+        $response = $this->postJson('/api/posts', $post);
+        $response
+        ->assertStatus(200)
+        ->assertJsonPath('status', 'OK');
+    }
+
+    /** @test */
+    public function post_store_with_existent_author(): void
+    {
+        $post = [
+            'title' => 'Test',
+            'body' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad ',
+            'username' => 'Bret',
+        ];
+
+        $response = $this->postJson('/api/posts', $post);
+        $response
+        ->assertStatus(200)
+        ->assertJsonPath('status', 'OK');
+    }
+
+    /** @test */
+    public function post_store_with_existent_author_and_all_fields(): void
+    {
+        $post = [
+            'title' => 'Test',
+            'body' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad ',
+            'username' => 'Bret',
+            'name' => 'Clementina DuBuque',
+            'email' => 'test@test.test',
+            'address' => [
+                'street' => 'Kattie Turnpike',
+                'suite' => 'Apt. 20',
+                'city' => 'Lebsackbury',
+                'zipcode' => '31428-2261',
+                'geo' => [
+                    'lat' => "-38.2386",
+                    'lng' => "57.2232"
+                ]
+            ],
+            "phone" => "666666666",
+            "website" => "ambrose.net",
+            "company" => [
+                "name" => "Test SCC",
+                "catchPhrase" => "Centralized empowering task-force",
+                "bs" => "target end-to-end models"
+            ]
+        ];
+
+        $response = $this->postJson('/api/posts', $post);
+        $response
+        ->assertStatus(200)
+        ->assertJsonPath('status', 'OK');
+    }
+
+    /**
+     * @test
+     */
+    public function post_store_without_fields(): void
+    {
+        $post = [];
+
+        $response = $this->postJson('/api/posts', $post);
+        $response
+        ->assertStatus(200)
+        ->assertJsonPath('status', 'KO');
     }
 }
